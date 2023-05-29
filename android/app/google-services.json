@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "980690347662",
+    "project_id": "converter-18ee2",
+    "storage_bucket": "converter-18ee2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:980690347662:android:793b1206e8e1d706370bdf",
+        "android_client_info": {
+          "package_name": "com.example.converter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-139uhBZRmJRfhYqlB-7WOXL8b5eyJ9w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
