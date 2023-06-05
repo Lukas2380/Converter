@@ -25,6 +25,9 @@ class LoginPage extends StatelessWidget {
     final GoogleSignIn googleSignIn = GoogleSignIn();
 
     try {
+      // Benutzer zuerst abmelden, um die Auswahl des Google-Kontos zu erzwingen
+      await googleSignIn.signOut();
+
       final GoogleSignInAccount? googleSignInAccount =
           await googleSignIn.signIn();
 
@@ -39,19 +42,19 @@ class LoginPage extends StatelessWidget {
 
         await FirebaseAuth.instance.signInWithCredential(credential);
 
-        // Login successful, proceed to the next screen
+        // Anmeldung erfolgreich, zur nächsten Bildschirm fortfahren
         // ...
       } else {
-        // Google sign-in canceled by the user
-        // Handle cancellation if needed
+        // Google-Anmeldung vom Benutzer abgebrochen
+        // Abbruch behandeln, falls erforderlich
       }
     } catch (error) {
-      // Handle Google sign-in failure
+      // Fehler bei der Google-Anmeldung behandeln
       showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text('Google Sign-In Failed'),
+            title: const Text('Google-Anmeldung fehlgeschlagen'),
             content: Text(error.toString()),
             actions: [
               TextButton(
@@ -214,7 +217,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Center(

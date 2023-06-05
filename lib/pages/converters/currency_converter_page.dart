@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../public_helper_methods.dart';
+import '../../widgets/result_widget.dart';
 
 class CurrencyConverterPage extends StatefulWidget {
   const CurrencyConverterPage({Key? key}) : super(key: key);
@@ -125,10 +126,9 @@ class _CurrencyConverterPageState extends State<CurrencyConverterPage> {
               child:
                   const Text('Convert', style: TextStyle(color: Colors.white)),
             ),
-            const SizedBox(height: 32),
-            Text(
-              'Result: $_outputValue $_outputCurrency',
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ResultWidget(
+              outputValue: _outputValue,
+              unitSymbol: _outputCurrency,
             ),
           ],
         ),

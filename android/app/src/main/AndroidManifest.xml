@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.converter">
    <application
-        android:label="converter"
+        android:label="Converter"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

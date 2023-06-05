@@ -63,7 +63,7 @@ Color getCardColor(String unit) {
     case 'Weight':
       return Colors.red; // Set the color for weight conversion
     case 'Volume':
-      return Colors.purple; // Set the color for volume conversion
+      return Colors.purpleAccent; // Set the color for volume conversion
     case 'Currency':
       return Colors.cyan; // Set the color for currency conversion
     default:

@@ -194,7 +194,7 @@ class HomePage extends StatelessWidget {
                           color = Colors.red;
                           break;
                         case 'VolumeUnit':
-                          color = Colors.purple;
+                          color = Colors.purpleAccent;
                           break;
                         case 'CurrencyUnit':
                           color = Colors.teal;
@@ -253,53 +253,24 @@ class HomePage extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 30),
                                   Text(
-                                    'Time: $timestamp',
+                                    'Time: ${timestamp.toString().replaceRange(19, null, '')}',
                                     style: const TextStyle(
                                       color: Colors.black87,
                                       fontStyle: FontStyle.italic,
                                       fontSize: 16,
                                     ),
                                   ),
-                                  const SizedBox(height: 10),
+                                  const SizedBox(height: 30),
                                   Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          // Handle edit action
-                                          // Implement your logic here
-                                        },
-                                        child: Container(
-                                          color: Colors.white,
-                                          padding: const EdgeInsets.all(10),
-                                          child: const Text(
-                                            'Edit',
-                                            style: TextStyle(
-                                              color: Colors.black45,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const [
+                                      Text(
+                                        'Swipe to remove',
+                                        style: TextStyle(
+                                          color: Colors.black45,
+                                          fontWeight: FontWeight.bold,
                                         ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          // Handle delete action
-                                          deleteConversionFromFirestore(
-                                              conversion.id);
-                                        },
-                                        child: Container(
-                                          color: Colors.white,
-                                          padding: const EdgeInsets.all(10),
-                                          child: const Text(
-                                            'Delete',
-                                            style: TextStyle(
-                                              color: Colors.black45,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
+                                      )
                                     ],
                                   ),
                                 ],

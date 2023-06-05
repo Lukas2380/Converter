@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../public_helper_methods.dart';
+import '../../widgets/result_widget.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -169,10 +170,9 @@ class _SpeedConverterPageState extends State<SpeedConverterPage> {
               child:
                   const Text('Convert', style: TextStyle(color: Colors.white)),
             ),
-            const SizedBox(height: 32),
-            Text(
-              'Result: $_outputValue $_unitSymbol',
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ResultWidget(
+              outputValue: _outputValue,
+              unitSymbol: _unitSymbol,
             ),
           ],
         ),
