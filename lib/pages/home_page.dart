@@ -175,29 +175,22 @@ class HomePage extends StatelessWidget {
                       final outputUnit =
                           conversion['outputUnit'].toString().split('.').last;
                       final timestamp = conversion['timestamp']?.toDate();
-                      final conversionType =
-                          conversion['conversionType'].toString();
-                      Color? color; // Define color variable
+                      final conversionType = conversion['conversionType']
+                          .toString(); // Define color variable
 
                       // Assign color based on the conversion type
                       switch (conversionType) {
                         case 'TemperatureUnit':
-                          color = Colors.blue;
                           break;
                         case 'SpeedUnit':
-                          color = Colors.green;
                           break;
                         case 'TimeUnit':
-                          color = Colors.brown;
                           break;
                         case 'WeightUnit':
-                          color = Colors.red;
                           break;
                         case 'VolumeUnit':
-                          color = Colors.purpleAccent;
                           break;
                         case 'CurrencyUnit':
-                          color = Colors.teal;
                           break;
                       }
 
@@ -296,7 +289,7 @@ class ConversionButton extends StatelessWidget {
   final Color color;
 
   const ConversionButton({
-    Key? key,
+    super.key,
     required this.icon,
     required this.label,
     required this.onTap,

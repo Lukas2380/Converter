@@ -1,29 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
 import '../../public_helper_methods.dart';
 import '../../widgets/result_widget.dart';
 
-final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
 enum TimeUnit {
-  Seconds,
-  Minutes,
-  Hours,
+  seconds,
+  minutes,
+  hours,
 }
 
 class TimeConverterPage extends StatefulWidget {
   const TimeConverterPage({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _TimeConverterPageState createState() => _TimeConverterPageState();
 }
 
 class _TimeConverterPageState extends State<TimeConverterPage> {
   double _inputValue = 0;
-  TimeUnit _inputUnit = TimeUnit.Seconds;
-  TimeUnit _outputUnit = TimeUnit.Minutes;
+  TimeUnit _inputUnit = TimeUnit.seconds;
+  TimeUnit _outputUnit = TimeUnit.minutes;
   double _outputValue = 0;
   String _unitSymbol = '';
 
@@ -31,27 +27,27 @@ class _TimeConverterPageState extends State<TimeConverterPage> {
     double result;
     String unitSymbol = 'min'; // Default unit symbol for Minutes
 
-    if (_inputUnit == TimeUnit.Seconds && _outputUnit == TimeUnit.Minutes) {
+    if (_inputUnit == TimeUnit.seconds && _outputUnit == TimeUnit.minutes) {
       result = _inputValue / 60;
       unitSymbol = 'min';
-    } else if (_inputUnit == TimeUnit.Seconds &&
-        _outputUnit == TimeUnit.Hours) {
+    } else if (_inputUnit == TimeUnit.seconds &&
+        _outputUnit == TimeUnit.hours) {
       result = _inputValue / 3600;
       unitSymbol = 'hr';
-    } else if (_inputUnit == TimeUnit.Minutes &&
-        _outputUnit == TimeUnit.Seconds) {
+    } else if (_inputUnit == TimeUnit.minutes &&
+        _outputUnit == TimeUnit.seconds) {
       result = _inputValue * 60;
       unitSymbol = 's';
-    } else if (_inputUnit == TimeUnit.Minutes &&
-        _outputUnit == TimeUnit.Hours) {
+    } else if (_inputUnit == TimeUnit.minutes &&
+        _outputUnit == TimeUnit.hours) {
       result = _inputValue / 60;
       unitSymbol = 'hr';
-    } else if (_inputUnit == TimeUnit.Hours &&
-        _outputUnit == TimeUnit.Seconds) {
+    } else if (_inputUnit == TimeUnit.hours &&
+        _outputUnit == TimeUnit.seconds) {
       result = _inputValue * 3600;
       unitSymbol = 's';
-    } else if (_inputUnit == TimeUnit.Hours &&
-        _outputUnit == TimeUnit.Minutes) {
+    } else if (_inputUnit == TimeUnit.hours &&
+        _outputUnit == TimeUnit.minutes) {
       result = _inputValue * 60;
       unitSymbol = 'min';
     } else {
