@@ -5,6 +5,7 @@ class ResultWidget extends StatelessWidget {
   final String unitSymbol;
 
   const ResultWidget({
+    super.key,
     required this.outputValue,
     required this.unitSymbol,
   });

@@ -1,29 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../public_helper_methods.dart';
 import '../../widgets/result_widget.dart';
 
-final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
 enum SpeedUnit {
-  MilesPerHour,
-  KilometersPerHour,
-  MetersPerSecond,
+  milesPerHour,
+  kilometersPerHour,
+  metersPerSecond,
 }
 
 class SpeedConverterPage extends StatefulWidget {
   const SpeedConverterPage({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _SpeedConverterPageState createState() => _SpeedConverterPageState();
 }
 
 class _SpeedConverterPageState extends State<SpeedConverterPage> {
   double _inputValue = 0;
-  SpeedUnit _inputUnit = SpeedUnit.MilesPerHour;
-  SpeedUnit _outputUnit = SpeedUnit.KilometersPerHour;
+  SpeedUnit _inputUnit = SpeedUnit.milesPerHour;
+  SpeedUnit _outputUnit = SpeedUnit.kilometersPerHour;
   double _outputValue = 0;
   String _unitSymbol = '';
 
@@ -32,33 +29,33 @@ class _SpeedConverterPageState extends State<SpeedConverterPage> {
     String inputUnitSymbol = '';
     String outputUnitSymbol = '';
 
-    if (_inputUnit == SpeedUnit.MilesPerHour &&
-        _outputUnit == SpeedUnit.KilometersPerHour) {
+    if (_inputUnit == SpeedUnit.milesPerHour &&
+        _outputUnit == SpeedUnit.kilometersPerHour) {
       result = _inputValue * 1.60934;
       inputUnitSymbol = 'mph';
       outputUnitSymbol = 'km/h';
-    } else if (_inputUnit == SpeedUnit.MilesPerHour &&
-        _outputUnit == SpeedUnit.MetersPerSecond) {
+    } else if (_inputUnit == SpeedUnit.milesPerHour &&
+        _outputUnit == SpeedUnit.metersPerSecond) {
       result = _inputValue * 0.44704;
       inputUnitSymbol = 'mph';
       outputUnitSymbol = 'm/s';
-    } else if (_inputUnit == SpeedUnit.KilometersPerHour &&
-        _outputUnit == SpeedUnit.MilesPerHour) {
+    } else if (_inputUnit == SpeedUnit.kilometersPerHour &&
+        _outputUnit == SpeedUnit.milesPerHour) {
       result = _inputValue * 0.621371;
       inputUnitSymbol = 'km/h';
       outputUnitSymbol = 'mph';
-    } else if (_inputUnit == SpeedUnit.KilometersPerHour &&
-        _outputUnit == SpeedUnit.MetersPerSecond) {
+    } else if (_inputUnit == SpeedUnit.kilometersPerHour &&
+        _outputUnit == SpeedUnit.metersPerSecond) {
       result = _inputValue * 0.277778;
       inputUnitSymbol = 'km/h';
       outputUnitSymbol = 'm/s';
-    } else if (_inputUnit == SpeedUnit.MetersPerSecond &&
-        _outputUnit == SpeedUnit.MilesPerHour) {
+    } else if (_inputUnit == SpeedUnit.metersPerSecond &&
+        _outputUnit == SpeedUnit.milesPerHour) {
       result = _inputValue * 2.23694;
       inputUnitSymbol = 'm/s';
       outputUnitSymbol = 'mph';
-    } else if (_inputUnit == SpeedUnit.MetersPerSecond &&
-        _outputUnit == SpeedUnit.KilometersPerHour) {
+    } else if (_inputUnit == SpeedUnit.metersPerSecond &&
+        _outputUnit == SpeedUnit.kilometersPerHour) {
       result = _inputValue * 3.6;
       inputUnitSymbol = 'm/s';
       outputUnitSymbol = 'km/h';

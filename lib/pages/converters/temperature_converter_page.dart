@@ -1,30 +1,27 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../public_helper_methods.dart';
 import '../../widgets/result_widget.dart';
 
-final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
 enum TemperatureUnit {
-  Celsius,
-  Fahrenheit,
-  Kelvin,
+  celsius,
+  fahrenheit,
+  kelvin,
 }
 
 class TemperatureConverterPage extends StatefulWidget {
   const TemperatureConverterPage({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _TemperatureConverterPageState createState() =>
       _TemperatureConverterPageState();
 }
 
 class _TemperatureConverterPageState extends State<TemperatureConverterPage> {
   double _inputValue = 0;
-  TemperatureUnit _inputUnit = TemperatureUnit.Celsius;
-  TemperatureUnit _outputUnit = TemperatureUnit.Fahrenheit;
+  TemperatureUnit _inputUnit = TemperatureUnit.celsius;
+  TemperatureUnit _outputUnit = TemperatureUnit.fahrenheit;
   double _outputValue = 0;
   String _unitSymbol = '';
 
@@ -32,28 +29,28 @@ class _TemperatureConverterPageState extends State<TemperatureConverterPage> {
     double result;
     String unitSymbol = '°F'; // Default unit symbol for Fahrenheit
 
-    if (_inputUnit == TemperatureUnit.Celsius &&
-        _outputUnit == TemperatureUnit.Fahrenheit) {
+    if (_inputUnit == TemperatureUnit.celsius &&
+        _outputUnit == TemperatureUnit.fahrenheit) {
       result = (_inputValue * 9 / 5) + 32;
       unitSymbol = '°F';
-    } else if (_inputUnit == TemperatureUnit.Celsius &&
-        _outputUnit == TemperatureUnit.Kelvin) {
+    } else if (_inputUnit == TemperatureUnit.celsius &&
+        _outputUnit == TemperatureUnit.kelvin) {
       result = _inputValue + 273.15;
       unitSymbol = 'K';
-    } else if (_inputUnit == TemperatureUnit.Fahrenheit &&
-        _outputUnit == TemperatureUnit.Celsius) {
+    } else if (_inputUnit == TemperatureUnit.fahrenheit &&
+        _outputUnit == TemperatureUnit.celsius) {
       result = (_inputValue - 32) * 5 / 9;
       unitSymbol = '°C';
-    } else if (_inputUnit == TemperatureUnit.Fahrenheit &&
-        _outputUnit == TemperatureUnit.Kelvin) {
+    } else if (_inputUnit == TemperatureUnit.fahrenheit &&
+        _outputUnit == TemperatureUnit.kelvin) {
       result = (_inputValue + 459.67) * 5 / 9;
       unitSymbol = 'K';
-    } else if (_inputUnit == TemperatureUnit.Kelvin &&
-        _outputUnit == TemperatureUnit.Celsius) {
+    } else if (_inputUnit == TemperatureUnit.kelvin &&
+        _outputUnit == TemperatureUnit.celsius) {
       result = _inputValue - 273.15;
       unitSymbol = '°C';
-    } else if (_inputUnit == TemperatureUnit.Kelvin &&
-        _outputUnit == TemperatureUnit.Fahrenheit) {
+    } else if (_inputUnit == TemperatureUnit.kelvin &&
+        _outputUnit == TemperatureUnit.fahrenheit) {
       result = (_inputValue * 9 / 5) - 459.67;
       unitSymbol = '°F';
     } else {

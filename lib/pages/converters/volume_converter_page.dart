@@ -1,32 +1,28 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 import '../../public_helper_methods.dart';
 import '../../widgets/result_widget.dart';
 
-final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
 enum VolumeUnit {
-  Milliliters,
-  Liters,
-  CubicCentimeters,
-  CubicMeters,
-  CubicInches,
-  CubicFeet,
+  milliliters,
+  liters,
+  cubicCentimeters,
+  cubicMeters,
+  cubicInches,
+  cubicFeet,
 }
 
 class VolumeConverterPage extends StatefulWidget {
   const VolumeConverterPage({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _VolumeConverterPageState createState() => _VolumeConverterPageState();
 }
 
 class _VolumeConverterPageState extends State<VolumeConverterPage> {
   double _inputValue = 0;
-  VolumeUnit _inputUnit = VolumeUnit.Milliliters;
-  VolumeUnit _outputUnit = VolumeUnit.Liters;
+  VolumeUnit _inputUnit = VolumeUnit.milliliters;
+  VolumeUnit _outputUnit = VolumeUnit.liters;
   double _outputValue = 0;
   String _unitSymbol = '';
 
@@ -34,52 +30,52 @@ class _VolumeConverterPageState extends State<VolumeConverterPage> {
     double result;
     String unitSymbol = 'L'; // Default unit symbol for Liters
 
-    if (_inputUnit == VolumeUnit.Milliliters &&
-        _outputUnit == VolumeUnit.Liters) {
+    if (_inputUnit == VolumeUnit.milliliters &&
+        _outputUnit == VolumeUnit.liters) {
       result = _inputValue / 1000;
       unitSymbol = 'L';
-    } else if (_inputUnit == VolumeUnit.Milliliters &&
-        _outputUnit == VolumeUnit.CubicCentimeters) {
+    } else if (_inputUnit == VolumeUnit.milliliters &&
+        _outputUnit == VolumeUnit.cubicCentimeters) {
       result = _inputValue;
       unitSymbol = 'cm³';
-    } else if (_inputUnit == VolumeUnit.Milliliters &&
-        _outputUnit == VolumeUnit.CubicMeters) {
+    } else if (_inputUnit == VolumeUnit.milliliters &&
+        _outputUnit == VolumeUnit.cubicMeters) {
       result = _inputValue / 1000000;
       unitSymbol = 'm³';
-    } else if (_inputUnit == VolumeUnit.Liters &&
-        _outputUnit == VolumeUnit.Milliliters) {
+    } else if (_inputUnit == VolumeUnit.liters &&
+        _outputUnit == VolumeUnit.milliliters) {
       result = _inputValue * 1000;
       unitSymbol = 'mL';
-    } else if (_inputUnit == VolumeUnit.Liters &&
-        _outputUnit == VolumeUnit.CubicCentimeters) {
+    } else if (_inputUnit == VolumeUnit.liters &&
+        _outputUnit == VolumeUnit.cubicCentimeters) {
       result = _inputValue * 1000;
       unitSymbol = 'cm³';
-    } else if (_inputUnit == VolumeUnit.Liters &&
-        _outputUnit == VolumeUnit.CubicMeters) {
+    } else if (_inputUnit == VolumeUnit.liters &&
+        _outputUnit == VolumeUnit.cubicMeters) {
       result = _inputValue / 1000;
       unitSymbol = 'm³';
-    } else if (_inputUnit == VolumeUnit.CubicCentimeters &&
-        _outputUnit == VolumeUnit.Milliliters) {
+    } else if (_inputUnit == VolumeUnit.cubicCentimeters &&
+        _outputUnit == VolumeUnit.milliliters) {
       result = _inputValue;
       unitSymbol = 'mL';
-    } else if (_inputUnit == VolumeUnit.CubicCentimeters &&
-        _outputUnit == VolumeUnit.Liters) {
+    } else if (_inputUnit == VolumeUnit.cubicCentimeters &&
+        _outputUnit == VolumeUnit.liters) {
       result = _inputValue / 1000;
       unitSymbol = 'L';
-    } else if (_inputUnit == VolumeUnit.CubicCentimeters &&
-        _outputUnit == VolumeUnit.CubicMeters) {
+    } else if (_inputUnit == VolumeUnit.cubicCentimeters &&
+        _outputUnit == VolumeUnit.cubicMeters) {
       result = _inputValue / 1000000;
       unitSymbol = 'm³';
-    } else if (_inputUnit == VolumeUnit.CubicMeters &&
-        _outputUnit == VolumeUnit.Milliliters) {
+    } else if (_inputUnit == VolumeUnit.cubicMeters &&
+        _outputUnit == VolumeUnit.milliliters) {
       result = _inputValue * 1000000;
       unitSymbol = 'mL';
-    } else if (_inputUnit == VolumeUnit.CubicMeters &&
-        _outputUnit == VolumeUnit.Liters) {
+    } else if (_inputUnit == VolumeUnit.cubicMeters &&
+        _outputUnit == VolumeUnit.liters) {
       result = _inputValue * 1000;
       unitSymbol = 'L';
-    } else if (_inputUnit == VolumeUnit.CubicMeters &&
-        _outputUnit == VolumeUnit.CubicCentimeters) {
+    } else if (_inputUnit == VolumeUnit.cubicMeters &&
+        _outputUnit == VolumeUnit.cubicCentimeters) {
       result = _inputValue * 1000000;
       unitSymbol = 'cm³';
     } else {
