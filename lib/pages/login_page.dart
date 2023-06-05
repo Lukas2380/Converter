@@ -1,51 +1,205 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../components/my_button.dart';
 import '../components/my_textfield.dart';
-import '../components/square_tile.dart';
 
 class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
+  LoginPage({Key? key}) : super(key: key);
 
-  // text editing controllers
-  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  void signUserIn(BuildContext context) {
-    final String username = usernameController.text;
-    final String password = passwordController.text;
+  Future<void> signIn() async {
+    final String email = emailController.text.trim();
+    final String password = passwordController.text.trim();
 
-    if (username.isNotEmpty && password.isNotEmpty) {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+  }
+
+  Future<void> signInWithGoogle(BuildContext context) async {
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+
+    try {
+      final GoogleSignInAccount? googleSignInAccount =
+          await googleSignIn.signIn();
+
+      if (googleSignInAccount != null) {
+        final GoogleSignInAuthentication googleAuth =
+            await googleSignInAccount.authentication;
+
+        final OAuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+
+        await FirebaseAuth.instance.signInWithCredential(credential);
+
+        // Login successful, proceed to the next screen
+        // ...
+      } else {
+        // Google sign-in canceled by the user
+        // Handle cancellation if needed
+      }
+    } catch (error) {
+      // Handle Google sign-in failure
       showDialog(
         context: context,
-        builder: (BuildContext context) {
-          return const AlertDialog(
-            title: Text('Signing In'),
-            content: Text('Please wait...'),
-          );
-        },
-      );
-
-      // TODO: Add your sign-in logic here
-
-      // Clear text fields
-      usernameController.clear();
-      passwordController.clear();
-
-      // TODO: Navigate to the next screen or perform any desired actions after signing in
-
-      // Close the dialog
-      Navigator.pop(context);
-    } else {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
+        builder: (context) {
           return AlertDialog(
-            title: const Text('Error'),
-            content: const Text('Please enter both username and password.'),
+            title: const Text('Google Sign-In Failed'),
+            content: Text(error.toString()),
             actions: [
               TextButton(
                 onPressed: () {
-                  // Close the dialog
+                  Navigator.pop(context);
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  Future<void> createAccount(BuildContext context) async {
+    final String email = emailController.text.trim();
+    final String password = passwordController.text.trim();
+
+    // Validate email format
+    if (!_isEmailValid(email)) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Invalid Email'),
+            content: const Text('Please enter a valid email address.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
+
+    // Validate password length
+    if (!_isPasswordValid(password)) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Invalid Password'),
+            content: const Text('Password must be at least 6 characters long.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
+
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      // Account creation successful, proceed with login
+      await signIn();
+    } catch (error) {
+      String errorMessage = 'Account creation failed.';
+
+      if (error is FirebaseAuthException) {
+        if (error.code == 'email-already-in-use') {
+          errorMessage = 'The email address is already in use.';
+        }
+        // Handle other specific error codes if needed
+      }
+
+      // Show error dialog
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Account Creation Failed'),
+            content: Text(errorMessage),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  bool _isEmailValid(String email) {
+    // Use a regular expression to check for a valid email format
+    final RegExp emailRegex =
+        RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$');
+    return emailRegex.hasMatch(email);
+  }
+
+  bool _isPasswordValid(String password) {
+    // Check if the password length is at least 6 characters
+    return password.length >= 6;
+  }
+
+  Future<void> resetPassword(BuildContext context) async {
+    final String email = emailController.text.trim();
+
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      // ignore: use_build_context_synchronously
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Password Reset'),
+            content: const Text(
+              'A password reset email has been sent to your email address. Please follow the instructions in the email to reset your password.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    } catch (error) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Password Reset Failed'),
+            content: Text(error.toString()),
+            actions: [
+              TextButton(
+                onPressed: () {
                   Navigator.pop(context);
                 },
                 child: const Text('OK'),
@@ -64,75 +218,91 @@ class LoginPage extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: 50),
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 130),
 
-                // logo
-                const Icon(
-                  Icons.lock,
-                  size: 100,
-                ),
-
-                const SizedBox(height: 50),
-
-                // welcome back, you've been missed!
-                Text(
-                  'Welcome back you\'ve been missed!',
-                  style: TextStyle(
-                    color: Colors.grey[700],
-                    fontSize: 16,
+                  // welcome back, you've been missed!
+                  Text(
+                    'Login',
+                    style: TextStyle(
+                      color: Colors.grey[700],
+                      fontSize: 60,
+                    ),
                   ),
-                ),
 
-                const SizedBox(height: 25),
+                  const SizedBox(height: 25),
 
-                // username textfield
-                MyTextField(
-                  controller: usernameController,
-                  hintText: 'Username',
-                  obscureText: false,
-                ),
+                  // username textfield
+                  MyTextField(
+                    controller: emailController,
+                    hintText: 'Email',
+                    obscureText: false,
+                    prefixIcon: Icons.email,
+                  ),
 
-                const SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
-                // password textfield
-                MyTextField(
-                  controller: passwordController,
-                  hintText: 'Password',
-                  obscureText: true,
-                ),
+                  // password textfield
+                  MyTextField(
+                    controller: passwordController,
+                    hintText: 'Password',
+                    obscureText: true,
+                    prefixIcon: Icons.lock,
+                  ),
 
-                const SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
-                // forgot password?
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Forgot Password?',
-                        style: TextStyle(color: Colors.grey[600]),
+                      // create account button
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextButton(
+                          onPressed: () {
+                            createAccount(context);
+                          },
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.zero,
+                          ),
+                          child: Text(
+                            'Create Account',
+                            style: TextStyle(color: Colors.grey[600]),
+                          ),
+                        ),
+                      ),
+
+                      // forgot password?
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () {
+                            resetPassword(context);
+                          },
+                          child: Text(
+                            'Forgot Password?',
+                            style: TextStyle(color: Colors.grey[600]),
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                ),
 
-                const SizedBox(height: 25),
+                  const SizedBox(height: 25),
 
-                // sign in button
-                MyButton(
-                  onTap: () => signUserIn(context),
-                ),
+                  // sign in button
+                  MyButton(
+                    onTap: () => signIn(),
+                  ),
 
-                const SizedBox(height: 50),
+                  const SizedBox(height: 50),
 
-                // or continue with
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
+                  // or continue with
+                  Row(
                     children: [
                       Expanded(
                         child: Divider(
@@ -155,40 +325,27 @@ class LoginPage extends StatelessWidget {
                       ),
                     ],
                   ),
-                ),
 
-                const SizedBox(height: 50),
+                  const SizedBox(height: 50),
 
-                // google + apple sign in buttons
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    // google button
-                    SquareTile(imagePath: 'lib/images/google.png')
-                  ],
-                ),
-
-                const SizedBox(height: 50),
-
-                // not a member? register now
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Not a member?',
-                      style: TextStyle(color: Colors.grey[700]),
-                    ),
-                    const SizedBox(width: 4),
-                    const Text(
-                      'Register now',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
+                  // Google sign-in button
+                  InkWell(
+                    onTap: () => signInWithGoogle(context),
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                      ),
+                      child: const FaIcon(
+                        FontAwesomeIcons.google,
+                        size: 40,
+                        color: Colors.black,
                       ),
                     ),
-                  ],
-                )
-              ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
