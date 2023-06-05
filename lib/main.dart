@@ -17,8 +17,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       // Wrap with MaterialApp or WidgetsApp
-      title: 'Your App',
+      title: 'Converter',
       theme: ThemeData(
         primaryColor: Colors.black,
         appBarTheme: const AppBarTheme(
